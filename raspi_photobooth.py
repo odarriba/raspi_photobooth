@@ -30,8 +30,8 @@ instructions_delay = 1 # #delay while showing the instructions
 capture_delay = 4 # delay after taking the picture / video
 show_delay = 5 # how long to display finished message before beginning a new session
 
-monitor_w = 800
-monitor_h = 480
+monitor_w = 1184
+monitor_h = 624
 
 transform_x = monitor_w # how wide to scale the jpg when replaying
 transfrom_y = monitor_h # how high to scale the jpg when replaying
@@ -39,7 +39,7 @@ transfrom_y = monitor_h # how high to scale the jpg when replaying
 offset_x = 0 # how far off to left corner to display photos
 offset_y = 0 # how far off to left corner to display photos
 
-pixel_width = 500 # width of the photos
+pixel_width = 1920 # width of the photos
 pixel_height = monitor_h * pixel_width // monitor_w # Calculate the height
 
 real_path = os.path.dirname(os.path.realpath(__file__))
@@ -169,4 +169,4 @@ show_image(real_path + "/intro.png");
 while True:
 	GPIO.wait_for_edge(button1_pin, GPIO.FALLING)
 	time.sleep(0.2) #debounce
-	start_photobooth()
+	take_photo()
