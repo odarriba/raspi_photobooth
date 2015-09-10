@@ -13,7 +13,6 @@ import atexit
 import sys
 import socket
 import pygame
-import config
 from signal import alarm, signal, SIGALRM, SIGKILL
 
 ########################
