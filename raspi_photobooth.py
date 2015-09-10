@@ -105,7 +105,7 @@ def take_photo():
 	
 	camera = picamera.PiCamera()
 	camera.resolution = (pixel_width, pixel_height) 
-	camera.vflip = True
+	camera.vflip = False
 	camera.hflip = False
 	# camera.saturation = -100 # comment out this line if you want color images
 	camera.start_preview()
@@ -125,7 +125,7 @@ def take_photo():
 	print "Taking the picture" 
 	now = time.strftime("%Y-%m-%d-%H:%M:%S") #get the current date and time for the start of the filename
 	try: #take the photos
-		camera.capture_continuous(file_path + now + '.jpg')
+		camera.capture(file_path + now + '.jpg')
 	finally:
 		camera.stop_preview()
 		camera.close()
