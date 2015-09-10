@@ -126,7 +126,7 @@ def take_photo():
 	print "Taking the picture" 
 	now = time.strftime("%Y-%m-%d-%H:%M:%S") #get the current date and time for the start of the filename
 	try: #take the photos
-		camera.capture_continuous(config.file_path + now + '.jpg'))
+		camera.capture_continuous(file_path + now + '.jpg')
 	finally:
 		camera.stop_preview()
 		camera.close()
@@ -135,7 +135,7 @@ def take_photo():
 	########################### Begin Step 4 #################################
 	GPIO.output(led1_pin,True) #turn on the LED
 	try:
-		show_image(config.file_path + now + '.jpg')
+		show_image(file_path + now + '.jpg')
 	except Exception, e:
 		tb = sys.exc_info()[2]
 		traceback.print_exception(e.__class__, e, tb)
