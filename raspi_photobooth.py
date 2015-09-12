@@ -84,6 +84,9 @@ def aspect_scale(img,(bx,by)):
         else:
             sy = by
 
+    sx = int(sx)
+    sy = int(sy)
+
     return pygame.transform.scale(img, (sx,sy))
 
 def cleanup():
