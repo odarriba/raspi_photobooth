@@ -108,7 +108,7 @@ def take_photo():
 	now = time.strftime("%Y-%m-%d-%H:%M:%S") #get the current date and time for the start of the filename
 
 	os.chdir(file_path)
-  	sub.Popen("raspistill -t " + capture_delay*1000 + " -o photo_"+now+".jpg", shell=True, stdout=sub.PIPE)
+  	sub.Popen("raspistill -t " + str(capture_delay*1000) + " -o photo_"+now+".jpg", shell=True, stdout=sub.PIPE)
 	
 	
 	########################### Begin Step 4 #################################
