@@ -26,7 +26,8 @@ button2_pin = 18 # pin for the big blue button (video)
 shutdown_button_pin = 16 # pin for button to hutdown the pi
 
 instructions_delay = 3 # #delay while showing the instructions
-capture_delay = 7 # delay after taking the picture / video
+capture_delay = 7 # delay after taking the picture
+video_length = 10 # seconds to record on the video
 show_delay = 5 # how long to display finished message before beginning a new session
 
 monitor_w = 1184
@@ -148,7 +149,7 @@ def take_video():
 	now = time.strftime("%Y-%m-%d-%H:%M:%S") #get the current date and time for the start of the filename
 
 	os.chdir(file_path)
-  	sub.Popen("raspivid -t 10000 -o photo_"+now+".h264", shell=True, stdout=sub.PIPE)
+  	sub.Popen("raspivid -t " + str(video_length*1000) + " -o photo_"+now+".h264", shell=True, stdout=sub.PIPE)
 	
 	
 	########################### Begin Step 4 #################################
@@ -186,8 +187,8 @@ GPIO.output(led2_pin,True);
 
 show_image(real_path + "/intro.png");
 
-GPIO.add_event_detect(button1_pin, GPIO.FALLING)
-GPIO.add_event_detect(button2_pin, GPIO.FALLING)
+GPIO.add_event_detect(button1_pin, GPIO.FALLING, bouncetime=300)
+GPIO.add_event_detect(button2_pin, GPIO.FALLING, bouncetime=300)
 
 while True:
 	if GPIO.event_detected(button1_pin):
