@@ -30,8 +30,8 @@ capture_delay = 7 # delay after taking the picture
 video_length = 10 # seconds to record on the video
 show_delay = 5 # how long to display finished message before beginning a new session
 
-monitor_w = 1184
-monitor_h = 624
+monitor_w = 1280
+monitor_h = 720
 
 transform_x = monitor_w # how wide to scale the jpg when replaying
 transfrom_y = monitor_h # how high to scale the jpg when replaying
