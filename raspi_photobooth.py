@@ -81,7 +81,18 @@ def init_pygame():
 def show_image(image_path):
     screen = init_pygame()
     img=pygame.image.load(image_path) 
-    img = pygame.transform.scale(img,(transform_x,transfrom_y))
+
+    image_x = img.get_rect().w
+    image_y = img.get_rect().h
+
+    transform_y = monitor_h
+    transform_x = image_x*(transform_y/image_y)
+
+    img = pygame.transform.scale(img,(transform_x,transform_y))
+
+    offset_x = (monitor_w-transform_x)/2
+    offset_y = 0
+    
     screen.blit(img,(offset_x,offset_y))
     pygame.display.flip()
 				
