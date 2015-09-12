@@ -110,6 +110,8 @@ def take_photo():
 
 	os.chdir(file_path)
   	sub.Popen("raspistill -t " + str(capture_delay*1000) + " -o photo_"+now+".jpg", shell=True, stdout=sub.PIPE)
+
+  	time.sleep(capture_delay+1)
 	
 	
 	########################### Begin Step 4 #################################
@@ -151,16 +153,7 @@ def take_video():
 	os.chdir(file_path)
   	sub.Popen("raspivid -t " + str(video_length*1000) + " -o photo_"+now+".h264", shell=True, stdout=sub.PIPE)
 	
-	
-	########################### Begin Step 4 #################################
-	GPIO.output(led1_pin,True) #turn on the LED
-	try:
-		show_image(file_path + "photo_"+ now + '.jpg')
-	except Exception, e:
-		tb = sys.exc_info()[2]
-		traceback.print_exception(e.__class__, e, tb)
-	
-	time.sleep(show_delay)
+	sleep(video_length+1)
 
 	GPIO.output(led1_pin,True)
 	GPIO.output(led2_pin,True)
