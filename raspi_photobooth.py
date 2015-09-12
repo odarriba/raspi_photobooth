@@ -8,12 +8,11 @@ import time
 import traceback
 from time import sleep
 import RPi.GPIO as GPIO
-import picamera # http://picamera.readthedocs.org/en/release-1.4/install2.html
 import atexit
 import sys
-import socket
 import pygame
 from signal import alarm, signal, SIGALRM, SIGKILL
+import subprocess as sub
 
 ########################
 ### Variables Config ###
