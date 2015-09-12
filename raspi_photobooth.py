@@ -26,8 +26,8 @@ button1_pin = 22 # pin for the big red button (photo)
 button2_pin = 18 # pin for the big blue button (video)
 shutdown_button_pin = 16 # pin for button to hutdown the pi
 
-instructions_delay = 1 # #delay while showing the instructions
-capture_delay = 4 # delay after taking the picture / video
+instructions_delay = 3 # #delay while showing the instructions
+capture_delay = 7 # delay after taking the picture / video
 show_delay = 5 # how long to display finished message before beginning a new session
 
 monitor_w = 1184
@@ -102,39 +102,60 @@ def take_photo():
 		state = not state
 
 	show_image(real_path + "/blank.png")
-	
-	camera = picamera.PiCamera()
-	camera.resolution = (pixel_width, pixel_height) 
-	camera.vflip = False
-	camera.hflip = False
-	# camera.saturation = -100 # comment out this line if you want color images
-	camera.start_preview()
-	
-	# Blink the button while warming the camera
-	state = True
-	for i in range((capture_delay*2)-2):
-		GPIO.output(led1_pin,state)
-		sleep(0.5)
-		state = not state
 
-	# Shutdown the led while taking the photo
-	GPIO.output(led1_pin,False)
-	sleep(1)
 
 	# Take the pic
 	print "Taking the picture" 
 	now = time.strftime("%Y-%m-%d-%H:%M:%S") #get the current date and time for the start of the filename
-	try: #take the photos
-		camera.capture(file_path + now + '.jpg')
-	finally:
-		camera.stop_preview()
-		camera.close()
+
+	os.chdir(file_path)
+  	sub.Popen("raspistill -t " + capture_delay*1000 + " -o photo_"+now+".jpg", shell=True, stdout=sub.PIPE)
 	
 	
 	########################### Begin Step 4 #################################
 	GPIO.output(led1_pin,True) #turn on the LED
 	try:
-		show_image(file_path + now + '.jpg')
+		show_image(file_path + "photo_"+ now + '.jpg')
+	except Exception, e:
+		tb = sys.exc_info()[2]
+		traceback.print_exception(e.__class__, e, tb)
+	
+	time.sleep(show_delay)
+
+	GPIO.output(led1_pin,True)
+	GPIO.output(led2_pin,True)
+	show_image(real_path + "/intro.png");
+
+def take_video():
+	# Turn off the leds
+	GPIO.output(led1_pin,False)
+	GPIO.output(led2_pin,False)
+
+	show_image(real_path + "/blank.png")
+	show_image(real_path + "/instructions_video.png")
+	
+	# Blink the button
+	state = True
+	for i in range(instructions_delay*2):
+		GPIO.output(led2_pin,state)
+		sleep(0.5)
+		state = not state
+
+	show_image(real_path + "/blank.png")
+
+
+	# Take the pic
+	print "Taking the video" 
+	now = time.strftime("%Y-%m-%d-%H:%M:%S") #get the current date and time for the start of the filename
+
+	os.chdir(file_path)
+  	sub.Popen("raspivid -t 10000 -o photo_"+now+".h264", shell=True, stdout=sub.PIPE)
+	
+	
+	########################### Begin Step 4 #################################
+	GPIO.output(led1_pin,True) #turn on the LED
+	try:
+		show_image(file_path + "photo_"+ now + '.jpg')
 	except Exception, e:
 		tb = sys.exc_info()[2]
 		traceback.print_exception(e.__class__, e, tb)
@@ -166,7 +187,14 @@ GPIO.output(led2_pin,True);
 
 show_image(real_path + "/intro.png");
 
+GPIO.add_event_detect(button1_pin, GPIO.FALLING)
+GPIO.add_event_detect(button2_pin, GPIO.FALLING)
+
 while True:
-	GPIO.wait_for_edge(button1_pin, GPIO.FALLING)
-	time.sleep(0.2) #debounce
-	take_photo()
+	if GPIO.event_detected(button1_pin):
+		time.sleep(0.2) #debounce
+		take_photo()
+
+	if GPIO.event_detected(button2_pin):
+		time.sleep(0.2) #debounce
+		take_video()
