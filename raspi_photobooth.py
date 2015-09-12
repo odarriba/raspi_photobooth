@@ -146,7 +146,7 @@ def take_photo():
 	os.chdir(file_path)
   	sub.Popen("raspistill -t " + str(capture_delay*1000) + " -o photo_"+now+".jpg", shell=True, stdout=sub.PIPE)
 
-  	time.sleep(capture_delay+2)
+  	time.sleep(capture_delay)
 	
 	
 	########################### Begin Step 4 #################################
