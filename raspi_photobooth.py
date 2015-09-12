@@ -109,7 +109,7 @@ def show_image(image_path):
     screen = init_pygame()
     img=pygame.image.load(image_path) 
 
-    img = aspect_scale(img, monitor_w, monitor_h)
+    img = aspect_scale(img, (monitor_w, monitor_h))
 
     image_x = img.get_rect().w
     image_y = img.get_rect().h
