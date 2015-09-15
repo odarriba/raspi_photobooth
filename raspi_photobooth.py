@@ -158,8 +158,6 @@ def take_photo():
 	except Exception, e:
 		tb = sys.exc_info()[2]
 		traceback.print_exception(e.__class__, e, tb)
-	
-	time.sleep(show_delay)
 
 	GPIO.output(led1_pin,True)
 	GPIO.output(led2_pin,True)
@@ -191,8 +189,7 @@ def take_video():
 	os.chdir(real_path+"/video");
 
 	# Launch picam and wait
-	camera = sub.Popen("./picam --alsadev hw:0,0", shell=True, stdout=sub.PIPE)
-	time.sleep(show_delay)
+	camera = sub.Popen("./picam --preview --opacity 255 --alsadev hw:1,0", shell=True, stdout=sub.PIPE)
 
 	# Start record
 	sub.Popen("touch hooks/start_record", shell=True, stdout=sub.PIPE)
