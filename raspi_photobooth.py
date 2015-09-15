@@ -148,8 +148,7 @@ def take_photo():
 	os.chdir(real_path + "/pics");
   	sub.Popen("raspistill -t " + str(capture_delay*1000) + " -o photo_"+now+".jpg", shell=True, stdout=sub.PIPE)
 
-  	time.sleep(capture_delay)
-	
+  	time.sleep(capture_delay+1)
 	
 	########################### Begin Step 4 #################################
 	GPIO.output(led1_pin,True) #turn on the LED
