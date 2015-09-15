@@ -17,7 +17,6 @@ import subprocess as sub
 ########################
 ### Variables Config ###
 ########################
-file_path = '/home/pi/photobooth/pics/' # Where to save the photos and videos.
 
 led1_pin = 15 # LED 1
 led2_pin = 19 # LED 2
@@ -146,7 +145,7 @@ def take_photo():
 	print "Taking the picture" 
 	now = time.strftime("%Y-%m-%d-%H:%M:%S") #get the current date and time for the start of the filename
 
-	os.chdir(file_path)
+	os.chdir(real_path + "/pics");
   	sub.Popen("raspistill -t " + str(capture_delay*1000) + " -o photo_"+now+".jpg", shell=True, stdout=sub.PIPE)
 
   	time.sleep(capture_delay)
@@ -155,7 +154,7 @@ def take_photo():
 	########################### Begin Step 4 #################################
 	GPIO.output(led1_pin,True) #turn on the LED
 	try:
-		show_image(file_path + "photo_"+ now + '.jpg')
+		show_image(real_path + "/pics/photo_"+ now + '.jpg')
 	except Exception, e:
 		tb = sys.exc_info()[2]
 		traceback.print_exception(e.__class__, e, tb)
@@ -170,6 +169,8 @@ def take_video():
 	# Turn off the leds
 	GPIO.output(led1_pin,False)
 	GPIO.output(led2_pin,False)
+
+	os.chdir(real_path)
 
 	show_image(real_path + "/blank.png")
 	show_image(real_path + "/instructions_video.png")
@@ -186,12 +187,23 @@ def take_video():
 
 	# Take the pic
 	print "Taking the video" 
-	now = time.strftime("%Y-%m-%d-%H:%M:%S") #get the current date and time for the start of the filename
 
-	os.chdir(file_path)
-  	sub.Popen("raspivid -t " + str(video_length*1000) + " -o photo_"+now+".h264", shell=True, stdout=sub.PIPE)
-	
-	sleep(video_length+1)
+	os.chdir(real_path+"/video");
+
+	# Launch picam and wait
+	camera = sub.Popen("./picam --alsadev hw:0,0", shell=True, stdout=sub.PIPE)
+	time.sleep(show_delay)
+
+	# Start record
+	sub.Popen("touch hooks/start_record", shell=True, stdout=sub.PIPE)
+	time.sleep(video_length)
+
+	# Stop record
+	sub.Popen("touch hooks/stop_record", shell=True, stdout=sub.PIPE)
+
+	# Kill picam
+	sub.Popen("pgrep -o -x picam | xargs -I {} kill -9 {}", shell=True, stdout=sub.PIPE)
+	time.sleep(1)
 
 	GPIO.output(led1_pin,True)
 	GPIO.output(led2_pin,True)
