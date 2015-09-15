@@ -188,6 +188,9 @@ def take_video():
 
 	os.chdir(real_path+"/video");
 
+	# Remove old hooks
+	sub.Popen("rm -f hooks/*", shell=True, stdout=sub.PIPE)
+
 	# Launch picam and wait
 	camera = sub.Popen("./picam --preview --opacity 255 --alsadev hw:1,0", shell=True, stdout=sub.PIPE)
 
