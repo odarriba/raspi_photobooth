@@ -213,6 +213,10 @@ def take_video():
 ### Main Program ###
 ####################
 
+sub.Popen("xset -dpms", shell=True, stdout=sub.PIPE)
+sub.Popen("xset s off", shell=True, stdout=sub.PIPE)
+sub.Popen("xset s noblank", shell=True, stdout=sub.PIPE)
+
 # when a falling edge is detected on button2_pin and button3_pin, regardless of whatever   
 # else is happening in the program, their function will be run   
 GPIO.add_event_detect(shutdown_button_pin, GPIO.FALLING, callback=shut_it_down, bouncetime=300) 
